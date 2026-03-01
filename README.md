@@ -8,11 +8,8 @@ A self-hosted Restic backup server running on Docker.
 
 The backup infrastructure consists of:
 
-- **Restic Client** - Laptop/backup source
-- **Home Router** - Port forwarding to expose the server
 - **ResticServer** - Docker host running restic/rest-server
 - **Vault** - Local storage for backup data (`D:/ResticVault/data`)
-- **Backblaze B2** - Cloud storage for offsite backups
 
 ## Components
 
@@ -36,9 +33,7 @@ make down
 
 ## Configuration
 
-The server runs on port 8000 with:
-- Username: `robert`
-- Password: `robertjames`
+The server runs on port 8000 with auth
 
 Backup data is stored at: `D:/ResticVault/data`
 
