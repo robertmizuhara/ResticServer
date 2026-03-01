@@ -1,0 +1,29 @@
+services:
+  # 1. The Janitor: Runs once, cleans up, then exits.
+  vault-maintenance:
+    image: restic/restic:latest
+    container_name: restic_janitor
+    volumes:
+      - D:/ResticVault/data:/data # Same path as the server
+    environment:
+      - RESTIC_REPOSITORY=/data/robert
+      - RESTIC_PASSWORD=robertjames 
+    # This command forgets old snapshots AND prunes the data
+    command: forget --keep-daily 7 --keep-weekly 6 --keep-monthly 12 --prune
+
+  # 2. The Vault: Starts ONLY after the Janitor finishes.
+  rest-server:
+    image: restic/rest-server:latest
+    container_name: restic_vault
+    restart: always
+    depends_on:
+      vault-maintenance:
+        condition: service_completed_successfully # Wait for prune to finish
+    ports:
+      - "8000:8000"
+    volumes:
+      - D:/ResticVault/data:/data
+    environment:
+      - OPTIONS=--append-only --private-repos
+      - RESTIC_USER=robert
+      - RESTIC_PASSWORD=robertjames
