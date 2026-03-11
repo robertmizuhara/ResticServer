@@ -9,7 +9,7 @@ services:
       - RESTIC_REPOSITORY=/data/robert
       - RESTIC_PASSWORD=robertjames 
     # This command forgets old snapshots AND prunes the data
-    command: forget --keep-daily 7 --keep-weekly 6 --keep-monthly 12 --prune
+    command: forget --keep-daily 30 --keep-weekly 12 --keep-monthly 12 --prune
 
   # 2. The Vault: Starts ONLY after the Janitor finishes.
   rest-server:
