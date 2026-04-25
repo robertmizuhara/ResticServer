@@ -9,12 +9,49 @@ services:
       - RESTIC_PASSWORD=robertjames
     command: unlock
 
+  vault-repair-index:
+    image: restic/restic:latest
+    container_name: restic_repair_index
+    volumes:
+      - D:/ResticVault/data:/data
+    environment:
+      - RESTIC_REPOSITORY=/data/robert
+      - RESTIC_PASSWORD=robertjames
+    command: repair index
+
+  vault-repair-snapshots:
+    image: restic/restic:latest
+    container_name: restic_repair_snapshots
+    volumes:
+      - D:/ResticVault/data:/data
+    environment:
+      - RESTIC_REPOSITORY=/data/robert
+      - RESTIC_PASSWORD=robertjames
+    command: repair snapshots
+
+  vault-repair-packs:
+    image: restic/restic:latest
+    container_name: restic_repair_packs
+    volumes:
+      - D:/ResticVault/data:/data
+    environment:
+      - RESTIC_REPOSITORY=/data/robert
+      - RESTIC_PASSWORD=robertjames
+    command: repair packs
+
+  vault-check:
+    image: restic/restic:latest
+    container_name: restic_check
+    volumes:
+      - D:/ResticVault/data:/data
+    environment:
+      - RESTIC_REPOSITORY=/data/robert
+      - RESTIC_PASSWORD=robertjames
+    command: check
+
   vault-maintenance:
     image: restic/restic:latest
     container_name: restic_janitor
-    depends_on:
-      vault-unlock:
-        condition: service_completed_successfully
     volumes:
       - D:/ResticVault/data:/data
     environment:
@@ -26,9 +63,6 @@ services:
     image: restic/rest-server:latest
     container_name: restic_vault
     restart: always
-    depends_on:
-      vault-maintenance:
-        condition: service_completed_successfully
     ports:
       - "8000:8000"
     volumes:
